@@ -1,38 +1,38 @@
-import { useEffect, useState } from "react";
-import reactLogo from "./assets/react.svg";
-import { invoke } from "@tauri-apps/api/core";
+import { useState } from "react";
 import "./App.css";
-import Database, { QueryResult } from "@tauri-apps/plugin-sql";
+import { invoke } from "@tauri-apps/api/core";
 
 interface Props {
-  db: Database;
+  url: string;
+  counter: number;
 }
 
-function App({ db }: Props) {
+function App({ url, counter }: Props) {
   const [name, setName] = useState("");
   const [saved, setSaved] = useState<any[]>([]);
 
-  async function greet() {
-    db.execute('INSERT into feeds (slug, value) VALUES ($1, $2)', [name, name]);
-  }
-
-  useEffect(() => {
-    db.select('SELECT * FROM feeds WHERE 1=1').then((res: any[]) => {
-      setSaved(res);
-    });
-  }, []);
+  const handleCreateSharingCode = () => {
+    invoke("create_share", { url }).then(console.log);
+  };
 
   return (
     <main className="container">
       <ul>
-        {saved.map(item => <li key={item.slug}>{item.value}</li>)}
+        <li>URL: {url}</li>
+        <li>COUNTER: {counter}</li>
       </ul>
+
+      <div>
+        <button type="button" onClick={handleCreateSharingCode}>
+          Create code
+        </button>
+      </div>
 
       <form
         className="row"
         onSubmit={(e) => {
           e.preventDefault();
-          greet();
+          // greet();
         }}
       >
         <input

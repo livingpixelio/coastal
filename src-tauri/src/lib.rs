@@ -1,10 +1,5 @@
 use tauri_plugin_sql::{Migration, MigrationKind};
-
-// Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
-}
+mod commands;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -26,7 +21,7 @@ pub fn run() {
                 .add_migrations("sqlite:localdata.db", migrations)
                 .build(),
         )
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![commands::create_share])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

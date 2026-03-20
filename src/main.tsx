@@ -20,10 +20,10 @@ if (!handle) {
   console.log(handle.url);
 }
 handle.change((doc) => doc.counter++);
-console.log(handle.doc());
+const { counter } = handle.doc();
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <App db={db} />
+    <App url={handle.url} counter={counter} />
   </React.StrictMode>,
 );
